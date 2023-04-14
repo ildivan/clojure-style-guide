@@ -1,69 +1,68 @@
-= The Clojure Style Guide
+= La guida allo stile per Clojure
 :idprefix:
 :idseparator: -
 :sectanchors:
 :sectlinks:
 :toclevels: 1
 ifndef::backend-pdf[]
-:toc-title: pass:[<h2>Table of Contents</h2>]
+:toc-title: pass:[<h2>Tabella dei Contenuti</h2>]
 endif::[]
 :source-highlighter: rouge
 
-== Introduction
+== Introduzione
 
-[quote, Officer Alex J. Murphy / RoboCop]
+[quote, Ufficiale Alex J. Murphy / RoboCop]
 ____
-Role models are important.
+I modelli da prendere in esempio sono importanti.
 ____
 
 ifdef::env-github[]
-TIP: You can find a beautiful version of this guide with much improved navigation at https://guide.clojure.style.
+TIP: Puoi trovare una bellissima versione di questa guida con una navigazione 
+decisamente migliorata (in inglese) a https://guide.clojure.style.
 endif::[]
 
-This Clojure style guide recommends best practices so that real-world Clojure
-programmers can write code that can be maintained by other real-world Clojure
-programmers. A style guide that reflects real-world usage gets used, and a
-style guide that holds to an ideal that has been rejected by the people it is
-supposed to help risks not getting used at all -- no matter how good it is.
+Questa guida allo stile fornisce le best practice ai programmatori Clojure 
+in modo che possano scrivere codice facilmente mantenibile da altri 
+programmatori Clojure. Una guida allo stile che riflette l'utilizzo nel mondo 
+reale viene utilizzata, e una guida allo stile che viene rifiutata dalle persone 
+che dovrebbe aiutare rischia di non essere affatto utilizzata -- non importa quanto sia fatta bene. 
 
-The guide is separated into several sections of related rules. we've
-tried to add the rationale behind the rules (if it's omitted, we've
-assumed that it's pretty obvious).
+Questa guida è separata in diverse sezioni di regole correlate.
+Abbiamo provato ad includere il ragionamento dietro alle regole (se è stato omesso,
+abbiamo presento che fosse piuttosto ovvio).
 
-We didn't come up with all the rules out of nowhere; they are mostly
-based on the experience of the style guide's editors,
-feedback and suggestions from numerous members of the Clojure community, and
-various highly regarded Clojure programming resources, such as
-http://www.clojurebook.com/["Clojure Programming"]
-and https://www.manning.com/books/the-joy-of-clojure-second-edition["The Joy of Clojure"].
+Non abbiamo scovato tutte le regole dal nulla; sono basate soprattutto 
+sull'esperienza degli editori della guida, sui feedback e sui consigli
+dei numerosi membri della community di Clojure, e altre fonti molto apprezzate
+per la programmazione Clojure come http://www.clojurebook.com/["Clojure Programming"]
+e https://www.manning.com/books/the-joy-of-clojure-second-edition["The Joy of Clojure"].
 
-Nothing written here is set in stone.
-This style guide evolves over time as additional conventions are
-identified and past conventions are rendered obsolete by changes in
-Clojure itself.
+Nulla di ciò che viene scritto qui è inciso sulla pietra.
+Questa guida di stile si evolve con il passare del tempo, man mano
+che vengono identificate nuove convenzioni e quelle vecchie vengono
+rese obsolete dai cambiamenti nel liguaggio Clojure stesso.
 
-NOTE: Clojure's developers also maintain a list of
-https://clojure.org/community/contrib_howto#_coding_guidelines[coding
-guidelines for libraries].footnote:[Those guidelines are meant to
-be applied to Clojure itself and to all the Clojure Contrib libraries.]
-They were one of the sources of inspiration for the document, you're
-currently reading.
+NOTE: Gli sviluppatori Clojure mentengono anche una lista di
+https://clojure.org/community/contrib_howto#_coding_guidelines[linee guida 
+per la programmazione con librerie].footnote:[Queste linee guida sono pensate
+per essere applicate a Clojure stesso e a tutte le Clojure Contrib libraries.]
+Esse sono una delle fonti di ispirazione per il documento che stai leggendo.
 
 ifdef::env-github[]
-You can generate a PDF copy of this guide using https://asciidoctor.org/docs/asciidoctor-pdf/[AsciiDoctor PDF], and an HTML copy https://asciidoctor.org/docs/convert-documents/#converting-a-document-to-html[with] https://asciidoctor.org/#installation[AsciiDoctor] using the following commands:
+Puoi generare una copia PDF di questa guida usando https://asciidoctor.org/docs/asciidoctor-pdf/[AsciiDoctor PDF], e una copia HTML https://asciidoctor.org/docs/convert-documents/#converting-a-document-to-html[con] https://asciidoctor.org/#installation[AsciiDoctor] utilizzando i seguenti comandi:
 
 [source,shell]
 ----
-# Generates README.pdf
+# Genera README.pdf
 asciidoctor-pdf -a allow-uri-read README.adoc
 
-# Generates README.html
+# Genera README.html
 asciidoctor
 ----
 
 [TIP]
 ====
-Install the `rouge` gem to get nice syntax highlighting in the generated document.
+Installa 'rouge' con gem per ottenere la colorazione del codice nel documento generato.
 
 [source,shell]
 ----
@@ -76,179 +75,179 @@ endif::[]
 
 [quote, Harold Abelson, Structure and Interpretation of Computer Programs]
 ____
-Programs must be written for people to read, and only incidentally for machines to execute.
+I programmi devono essere scritti per le persone da leggere, e solo incidentalmente per le macchine da eseguire.
 ____
 
-It's common knowledge that code is read much more often than it is written.
-The guidelines provided here are intended to improve the readability of code and make it consistent across the wide spectrum of Clojure code.
-They are also meant to reflect real-world usage of Clojure instead of a random ideal. When we had to choose between a very established practice
-and a subjectively better alternative we've opted to recommend the established practice.footnote:[Occasionally we might suggest to the reader to consider some alternatives, though.]
+È risaputo che il codice viene letto molto più spesso di quanto viene scritto.
+Le linee guida fornite sono pensate per migliorare la leggibilità del codice e renderlo consistente (coerente) 
+in tutto il largo spettro del codice Clojure.
+Sono anche pensate per riflettere l'utilizzo di Clojure nel mondo reale invece di un suo ideale. Quando abbiamo dovuto
+scegliere tra una pratica ormai stabilita e un alternativa soggetivamente migliore abbiamo optato per raccomandare
+la pratica stabilita.footnote:[A volte potremmo suggerire al lettore di considerare delle alternative.]
 
-There are some areas in which there is no clear consensus in the Clojure community regarding a particular style (like semantic indentation vs fixed indentation, semantic comments vs uniform comments, etc).
-In such scenarios all popular styles are acknowledged and it's up to you to pick one and apply it consistently.
+Ci sono alcune aree in cui non esiste un consenso generale chiaro nella community di Clojure riguardante un particolare
+stile (come intentazione fissa vs intentazione semantica, commenti uniformi, commenti semantici, etc).
+In questi scenari tutti gli stili popolari sono riconosciuti e viene lasciato a te sceglierne uno e applicarlo coerentemente.
 
-Fortunately Clojure is a Lisp, and Lisps are fundamentally
-simple. Even though this guide was created a few years after Clojure
-(the first version was published in early 2013), you could see that most
-Clojure code in the wild was fairly uniform. We attribute this to
-both the simplicity we already mentioned and to the fact that since day
-1 Clojurists adopted many of the style conventions of other
-established Lisp dialects (e.g. Common Lisp and Scheme).  This made
-the work on this guide fairly easy and straight-forward, especially compared to
-the massive exercise in frustration that was the
-https://rubystyle.guide[Community Ruby Style Guide].footnote:[You'll notice that the Clojure style guide is pretty similar in structure to the Ruby style guide, which served as its main source of inspiration. You'll also notice that the Ruby style guide is much longer, mostly because of the complexity of the Ruby language.]
+Fortunatamente Clojure è un Lisp, e i Lisp sono fondamentalmente
+semplici. Anche se questa guida è stata creata qualche anno dopo Clojure
+(la prima versione è stata pubblicata all'inizio del 2013), si vedeva che il
+codice Clojure in natura era abbastanza uniforme. Attribuiamo questo
+sia alla semplicità di cui abbiamo già parlato sia al fatto che dal primo giorno
+i Clojuristi adottarono molte delle convenzioni stilistiche di altri
+dialetti Lisp stabiliti (ad esempio Common Lisp e Scheme). Questo rese
+il lavoro sulla guida è abbastanza semplice e diretto, soprattutto rispetto al
+massiccio sforzo e frustrazione che era la 
+https://rubystyle.guide[Community Ruby Style Guide].footnote:[Noterai che questa guida è molto simile in struttura a quella di Ruby, questo perchè essa è stata la nostra fonte primaria di ispirazione. Noterai anche che la guida allo stile per Ruby è molto più lunga, principalmente per la complessita del linguaggio.]
 
-Clojure is famously optimized for simplicity and clarity. We'd like to believe that this guide is going to help you optimize for maximum
-simplicity and clarity.
+Clojure è notoriamente ottimizzato per semplicità e chiarezza. Ci piace credere che questa guida ti aiuterà a ottimizzare al massimo
+semplicità e chiarezza.
 
-=== A Note About Consistency
+=== Un appunto sulla coerenza
 
 [quote, Ralph Waldo Emerson]
 ____
-A foolish consistency is the hobgoblin of little minds, adored by little statesmen and philosophers and divines.
+Una sciocca coerenza è l'hobgoblin delle piccole menti, adorato da piccoli politici, filosofi e teologi.
 ____
 
-A style guide is about consistency.footnote:[This section is heavily inspired by Python's PEP-8]
-Consistency with this style guide is important.
-Consistency within a project is more important.
-Consistency within one class or method is the most important.
+Una guida di stile riguarda la coerenza.footnote:[Questa sezione è fortemente ispirata al PEP-8 di Python]
+La coerenza con questa guida di stile è importante.
+La coerenza all'interno di un progetto è più importante.
+La coerenza all'interno di una classe o di un metodo è la cosa più importante.
 
-However, know when to be inconsistent -- sometimes style guide recommendations just aren't applicable. When in doubt, use your best judgment.
-Look at other examples and decide what looks best. And don't hesitate to ask!
+Tuttavia, sappi quando essere incoerente: a volte i consigli della guida di stile non sono applicabili. In caso di dubbio, usa il tuo miglior giudizio.
+Guarda altri esempi e decidi cosa sembra migliore. E non esitate a chiedere!
 
-In particular: do not break backwards compatibility just to comply with this guide!
+In particolare: non rompere la retrocompatibilità solo per rispettare questa guida!
 
-Some other good reasons to ignore a particular guideline:
+Alcuni altri buoni motivi per ignorare una particolare linea guida:
 
-* When applying the guideline would make the code less readable, even for someone who is used to reading code that follows this style guide.
-* To be consistent with surrounding code that also breaks it (maybe for historic reasons) -- although this is also an opportunity to clean up someone else's mess (in true XP style).
-* Because the code in question predates the introduction of the guideline and there is no other reason to be modifying that code.
-* When the code needs to remain compatible with older versions of Clojure that don't support the feature recommended by the style guide.
+* L'applicazione della linea guida renderebbe il codice meno leggibile, anche per chi è abituato a leggere il codice che segue questa guida di stile.
+* Per essere coerenti con il codice circostante che non la rispetta (forse per ragioni storiche) - sebbene questa sia anche un'opportunità per ripulire il casino di qualcun altro (in vero stile XP).
+* Perché il codice in questione è stato scritto prima dell'introduzione della linea guida e non c'è nessun altro motivo per modificare quel codice.
+* Quando il codice deve rimanere compatibile con le versioni precedenti di Clojure che non supportano la funzionalità consigliata dalla guida di stile.
 
-=== Translations
+=== Traduzioni
 
-Translations of the guide are available in the following languages:
+Sono disponibili traduzioni della guida originale nelle seguenti lingue:
 
-* https://github.com/geekerzp/clojure-style-guide/blob/master/README-zhCN.md[Chinese]
-* https://github.com/totakke/clojure-style-guide/blob/ja/README.adoc[Japanese]
-* https://github.com/kwakbab/clojure-style-guide/blob/master/README-koKO.md[Korean]
-* https://github.com/theSkilled/clojure-style-guide/blob/pt-BR/README.md[Portuguese] (Under progress)
-* https://github.com/Nondv/clojure-style-guide/blob/master/ru/README.md[Russian]
-* https://github.com/jeko2000/clojure-style-guide/blob/master/README.md[Spanish]
-* https://github.com/LeaveNhA/clojure-style-guide/blob/master/README.adoc[Turkish]
+* https://github.com/bbatsov/clojure-style-guide/master/README.adoc[Inglese (Originale)]
+* https://github.com/geekerzp/clojure-style-guide/blob/master/README-zhCN.md[Cinese]
+* https://github.com/totakke/clojure-style-guide/blob/ja/README.adoc[Giapponese]
+* https://github.com/kwakbab/clojure-style-guide/blob/master/README-koKO.md[Coreano]
+* https://github.com/theSkilled/clojure-style-guide/blob/pt-BR/README.md[Portoghese] (Lavori in corso)
+* https://github.com/Nondv/clojure-style-guide/blob/master/ru/README.md[Russo]
+* https://github.com/jeko2000/clojure-style-guide/blob/master/README.md[Spagnolo]
+* https://github.com/LeaveNhA/clojure-style-guide/blob/master/README.adoc[Turco]
 
-NOTE: These translations are not maintained by our editor team, so their quality
-and level of completeness may vary. The translated versions of the guide often
-lag behind the upstream English version.
+NOTE: Queste traduzioni (compresa questa in Italiano) non sono mantenute 
+dal team di editori della versione originale Inglese, quindi la qualità e livello di completezza può variare.
+Le versioni tradotte della guida spesso ritardano con le aggiunte rispetto all'originale.
 
-== Source Code Layout & Organization
+== Layout & Organizzazione del codice sorgente.
 
-[quote, Jerry Coffin (on indentation)]
+[quote, Jerry Coffin (sull' indentazione)]
 ____
-Nearly everybody is convinced that every style but their own is
-ugly and unreadable. Leave out the "but their own" and they're
-probably right...
+Quasi tutti sono convinti che ogni stile tranne il proprio sia
+brutto e illeggibile. Lascia fuori il "tranne il proprio" e hanno
+probabilmente ragione...
 ____
 
 [#80-character-limits]
-=== Maximum Line Length [[line-length]]
+=== Lunghezza massima della linea [[line-length]]
 
-Where feasible, avoid making lines longer than 80 characters.
+Ove possibile, evita di creare righe più lunghe di 80 caratteri.
 
-.Why Bother with 80 characters in a World of Modern Widescreen Displays?
+.Perchè preoccuparsi per 80 caratteri in un mondo con schermi larghissimi?
 ****
 
-A lot of people these days feel that a maximum line length of 80 characters is
-just a remnant of the past and makes little sense today. After all - modern
-displays can easily fit 200+ characters on a single line.  Still, there are some
-important benefits to be gained from sticking to shorter lines of code.
+Molte persone in questi giorni ritengono che una lunghezza massima della riga di 
+80 caratteri sia solo un residuo del passato e ha poco senso oggi.
+Dopo tutto - i display moderni possono facilmente contenere oltre 200 caratteri 
+su una singola riga. Eppure ci sono alcuni importanti vantaggi che si 
+ottengono dall'attenersi a righe di codice più brevi.
 
-First, and foremost - numerous studies have shown that humans read much faster
-vertically and very long lines of text impede the reading process. As noted
-earlier, one of the guiding principles of this style guide is to optimize the
-code we write for human consumption.
+Innanzitutto, numerosi studi hanno dimostrato che gli esseri umani leggono molto più velocemente
+verticalmente e linee di testo molto lunghe ostacolano il processo di lettura. Come mostrato
+in precedenza, uno dei principi di questa guida di stile è ottimizzare il
+codice che scriviamo per il consumo umano.
 
-Additionally, limiting the required editor window width makes it possible to
-have several files open side-by-side, and works well when using code review
-tools that present the two versions in adjacent columns.
+Inoltre, la limitazione della larghezza della finestra dell'editor richiesta rende possibile
+avere diversi file aperti fianco a fianco e funziona bene quando si utilizzano strumenti
+per la revisione del codice che presentano le due versioni in colonne adiacenti.
 
-The default wrapping in most tools disrupts the visual structure of the code,
-making it more difficult to understand. The limits are chosen to avoid wrapping
-in editors with the window width set to 80, even if the tool places a marker
-glyph in the final column when wrapping lines. Some web based tools may not
-offer dynamic line wrapping at all.
+Il wrapping predefinito nella maggior parte degli strumenti interrompe la struttura visiva del codice,
+rendendo più difficile la comprensione. I limiti sono scelti per evitare il wrapping
+negli editor con la larghezza della finestra impostata su 80, anche se lo strumento posiziona un glifo marcatore
+nella colonna finale durante il wrapping delle righe. Alcuni strumenti basati sul Web potrebbero non
+offrire un wrapping dinamico della linea.
 
-Some teams strongly prefer a longer line length. For code maintained exclusively
-or primarily by a team that can reach agreement on this issue, it is okay to
-increase the line length limit up to 100 characters, or all the way up
-to 120 characters. Please, restrain the urge to go beyond 120 characters.
+Alcuni team preferiscono fortemente una lunghezza della linea più lunga. 
+Per il codice gestito esclusivamente o principalmente da un team che può raggiungere
+un accordo su questo problema, va bene aumentare il limite di lunghezza della riga 
+fino a 100 caratteri o fino a 120 caratteri. 
+Per favore, frena l'impulso di andare oltre i 120 caratteri.
 ****
 
-=== Tabs vs Spaces [[spaces]]
+=== Tabs vs Spazi [[spaces]]
 
-Use *spaces* for indentation. No hard tabs.
+Usa gli *spazi* per l'indentazione. Non i tabs.
 
-=== Body Indentation [[body-indentation]]
+=== Indentazione del corpo di funzione [[body-indentation]]
 
-Use 2 spaces to indent the bodies of
-forms that have body parameters.  This covers all `def` forms, special
-forms and macros that introduce local bindings (e.g. `loop`, `let`,
-`when-let`) and many macros like `when`, `cond`, `+as->+`, `+cond->+`, `case`,
-`with-*`, etc.
+Usa 2 spazi per indentare i corpi dei form che hanno parametri.  Questo include tutte le varianti di `def` , form speciali e macro che introducono associazioni locali (ad esempio `loop`, `let`, `when-let`) e tante macro come `when`, `cond`, `+as->+`, `+cond->+`, `case`,
+`with-*`, ecc.
 
 [source,clojure]
 ----
-;; good
-(when something
-  (something-else))
+;; bene
+(when qualcosa
+  (qualcos-altro))
 
 (with-out-str
-  (println "Hello, ")
-  (println "world!"))
+  (println "Ciao, ")
+  (println "mondo!"))
 
-;; bad - four spaces
-(when something
-    (something-else))
+;; male - quattro spazi
+(when qualcosa
+    (qualcos-altro))
 
-;; bad - one space
+;; male - uno spazio
 (with-out-str
- (println "Hello, ")
- (println "world!"))
+ (println "Ciao, ")
+ (println "mondo!"))
 ----
 
-=== Function Arguments Alignment [[vertically-align-fn-args]]
+=== Allineamento degli argomenti di funzione [[vertically-align-fn-args]]
 
-Vertically align function (macro) arguments spanning multiple lines.
+Allinea verticalmente gli argomenti delle funzioni (macro) su più linee. 
 
 [source,clojure]
 ----
-;; good
+;; bene
 (filter even?
         (range 1 10))
 
-;; bad - argument aligned with function name (one space indent)
+;; male - argomento allineato con il nome della funzione (uno spazio di indentazione)
 (filter even?
  (range 1 10))
 
-;; bad - two space indent
+;; male - due spazi di indentazione
 (filter even?
   (range 1 10))
 ----
 
-The reasoning behind this guideline is pretty simple - the arguments are
-easier to process by the human brain if they stand out and stick together.
+Il ragionamento dietro a questa linea guida è piuttosto semplice - gli argomenti sono più facili da processare per il cervello umano se si distinguono e sono vicini.
 
-=== Function Arguments Indentation [[one-space-indent]]
+=== Allineamento degli argomenti di funzione [[one-space-indent]]
 
-NOTE: Generally, you should stick to the formatting outlined in the previous
-guideline, unless you're limited by the available horizontal space.
+NOTE: Generalmente, dovresti utilizzare la formattazione mostrata nella scorsa linea guida, a meno che tu sia limitato dallo spazio orizzontale disponibile.
 
-Use a single space indentation for function (macro) arguments
-when there are no arguments on the same line as the function name.
+Utilizzare un solo spazio di indentazione per gli argomenti della funzione (macro) dove non ci sono argomenti sulla stessa riga del nome della funzione.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (filter
  even?
  (range 1 10))
@@ -258,7 +257,7 @@ when there are no arguments on the same line as the function name.
  bala
  portokala)
 
-;; bad - two-space indent
+;; male - due spazi di indentazione
 (filter
   even?
   (range 1 10))
@@ -268,87 +267,70 @@ when there are no arguments on the same line as the function name.
   bala
   portokala)
 ----
-
-This may appear like some weird special rule to people without Lisp background, but the
-reasoning behind it is quite simple. Function calls are
-nothing but regular list literals and normally those are aligned in the same way as
-other collection type literals when spanning multiple lines:
+Questo può sembrare una strana regola speciale per le persone senza un background di Lisp, ma il ragionamento alla base è abbastanza semplice. Le chiamate di funzione sono nient'altro che normali liste letterali e normalmente quelli sono allineati allo stesso modo di altri tipi di raccolte letterali quando si estendono su più righe:
 
 [source,clojure]
 ----
-;; list literal
+;; liste letterali
 (1
  2
  3)
 
-;; vector literal
+;; vettori letterali
 [1
  2
  3]
 
-;; set literal
+;; set (insiemi) letterali
 #{1
   2
   3}
 ----
 
-Admittedly, list literals are not very common in Clojure, that's why it's understandable
-that for many people lists are nothing but an invocation syntax.
+Certo, le liste letterali non sono molto comuni in Clojure, ecco perché è comprensibile che per molte persone le liste letterali non sono altro che una sintassi di invocazione.
 
-As a side benefit, function arguments are still aligned in this scenario as well. They
-just happen to accidentally be aligned with the function name as well.
+Come vantaggio collaterale, anche in questo scenario gli argomenti delle funzioni sono ancora allineati, solo che essi sono accidentalmente allineati anche con il nome della funzione.
 
-.Semantic Indentation vs Fixed Indentation
+.Indentazione semantica vs Indentazione fissa
 ****
-The guidelines to indent differently macros with body forms from
-all other macro and function calls are collectively known as
-"semantic indentation". Simply put, this means that the code
-is indented differently, so that the indentation would give the
-reader of the code some hints about its meaning.
+Le linee guida per indentare in modo diverso le macro con il form del corpo da tutte le altre chiamate di macro e funzioni sono note collettivamente come "rientro semantico". In poche parole, questo significa che il codice è indentato in modo diverso, in modo che l'indentazione dia al lettore del codice alcuni cenni sul suo significato.
 
-The downside of this approach is that requires Clojure code formatters to be
-smarter. They either need to process `macro` arglists and rely on the fact
-that people named their parameters consistently, or process some additional
-indentation metadata.
+Lo svantaggio di questo approccio è che richiede che i formattatori di codice Clojure siano più intelligenti. Devono cosiì elaborare le liste di argomenti delle "macro" e fare affidamento sul fatto
+che le persone denominino i propri parametri in modo coerente o elaborino altri metadati di indentazione.
 
-Some people in the Clojure community have argued that's not worth it and
-that everything should simply be indented in the same fashion. Here are
-a few examples:
+Alcune persone nella comunità di Clojure sostengono che non ne valga la pena e che tutto dovrebbe semplicemente essere indentato nello stesso modo. Ecco alcuni esempi:
 
 [source,clojure]
 ----
-;;; Fixed Indentation
+;;; Indentazione fissa
 ;;
-;; macros
-(when something
-  (something-else))
+;; macro
+(when qualcosa
+  (qualcos-altro))
 
 (with-out-str
-  (println "Hello, ")
-  (println "world!"))
+  (println "Ciao, ")
+  (println "mondo!"))
 
-;; function call spanning two lines
+;; chiamata di funzione su due linee
 (filter even?
   (range 1 10))
 
-;; function call spanning three lines
+;; chiamata di funzione su tre linee
 (filter
   even?
   (range 1 10))
 ----
+Questo suggerimento ha sicuramente guadagnato terreno nella comunità, ma va anche contro gran parte della tradizione Lisp e uno degli obiettivi primari di questa guida di stile -vale a dire ottimizzare il codice per il consumo umano.
 
-This suggestion has certainly gotten some ground in the community, but it also
-goes against much of the Lisp tradition and one of the primary goals of this style guide -
-namely to optimize code for human consumption.
-
-There's one exception to the fixed indentation rule - data lists (those that are not a function invocation):
+C'è un'eccezione alla regola di indentazione fissa: gli elenchi di dati (quelli che non sono un'invocazione di funzione):
 
 [source,clojure]
 ----
-;;; Fixed Indentation
+;;; Indentazione fissa
 ;;
-;; list literals
-;; we still do
+;; liste letterali
+;; facciamo ancora 
 (1
  2
  3
@@ -356,15 +338,15 @@ There's one exception to the fixed indentation rule - data lists (those that are
  5
  6)
 
-;; and
+;; e anche
 (1 2 3
  4 5 6)
 
-;; instead of
+;; invece di
 (1 2 3
   4 5 6)
 
-;; or
+;; oppure
 (1
   2
   3
@@ -372,57 +354,54 @@ There's one exception to the fixed indentation rule - data lists (those that are
   5
   6)
 ----
-
-This makes sure that lists are consistent with how other collection types are normally indented.
+Ciò garantisce che gli elenchi siano coerenti con il modo in cui gli altri tipi di raccolta sono normalmente indentati.
 
 ****
 
-=== Bindings Alignment [[bindings-alignment]]
+=== Allineamento delle associazioni [[bindings-alignment]]
 
-Vertically align `let` (and `let`-like) bindings.
-
-[source,clojure]
-----
-;; good
-(let [thing1 "some stuff"
-      thing2 "other stuff"]
-  (foo thing1 thing2))
-
-;; bad
-(let [thing1 "some stuff"
-  thing2 "other stuff"]
-  (foo thing1 thing2))
-----
-
-=== Map Keys Alignment [[map-keys-alignment]]
-
-Align vertically map keys.
+Allinea verticalmente le associazioni 'let' (e simili a 'let').
 
 [source,clojure]
 ----
-;; good
-{:thing1 thing1
- :thing2 thing2}
+;; bene
+(let [cosa1 "delle cose"
+      cosa2 "altre cose"]
+  (foo cosa1 cosa2))
 
-;; bad
-{:thing1 thing1
-:thing2 thing2}
-
-;; bad
-{:thing1 thing1
-  :thing2 thing2}
+;; male
+(let [cosa1 "delle cose"
+  cosa2 "altre cose"]
+  (foo cosa1 cosa2))
 ----
 
-=== Line Endings [[crlf]]
+=== Allineamento chiavi delle mappe [[map-keys-alignment]]
 
-Use Unix-style line endings.footnote:[*BSD/Solaris/Linux/macOS users are
-covered by default, Windows users have to be extra careful.]
+Allinea verticalmente le chiavi delle mappe.
+
+[source,clojure]
+----
+;; bene
+{:cosa1 cosa1
+ :cosa2 cosa2}
+
+;; male
+{:cosa1 cosa1
+:cosa2 cosa2}
+
+;; male
+{:cosa1 cosa1
+  :cosa2 cosa2}
+----
+
+=== Fine Linea [[crlf]]
+
+Usa il fine linea in stile Unix.footnote:[*Utenti BSD/Solaris/Linux/macOS sono coperti di default,gli utenti Windows devono essere più cauti.]
 
 [TIP]
 ====
-If you're using Git you might want to add the following
-configuration setting to protect your project from Windows line
-endings creeping in:
+Se stai usando Git potresti voler aggiungere la seguente impostazione di configurazione per proteggere il progetto dai fine linea di Windows
+che si insinuano al suo interno:
 
 [source,shell]
 ----
@@ -430,127 +409,122 @@ $ git config --global core.autocrlf true
 ----
 ====
 
-=== Terminate Files With a Newline [[terminate-files-with-a-newline]]
+=== Termina ogni file con una nuova linea [[terminate-files-with-a-newline]]
 
-End each file with a newline.
+Termina ogni file andando a capo.
 
-TIP: This should be done by through editor configuration, not manually.
+TIP: Questo  dovrebbe essere fatto per configurazione dell'editor, non manualmente.
 
-=== Bracket Spacing [[bracket-spacing]]
-
-If any text precedes an opening bracket(`(`, `{` and
-`[`) or follows a closing bracket(`)`, `}` and `]`), separate that
-text from that bracket with a space. Conversely, leave no space after
-an opening bracket and before following text, or after preceding text
-and before a closing bracket.
+=== Spaziatura delle parentesi [[bracket-spacing]]
+Se del testo precede una parentesi di apertura (`(`, `{` e
+`[`) o segue una parentesi di chiusura (`)`, `}` e `]`), separa il
+testo da quella parentesi con uno spazio. Al contrario, non lasciare spazio dopo una parentesi di apertura e prima del testo seguente o dopo il testo precedente e prima di una parentesi di chiusura.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (foo (bar baz) quux)
 
-;; bad
+;; male
 (foo(bar baz)quux)
 (foo ( bar baz ) quux)
 ----
 
-=== No Commas in Sequential Collection Literals [[no-commas-for-seq-literals]]
+=== Niente virgole nei letterali di raccolta sequenziali [[no-commas-for-seq-literals]]
 
 [quote, Alan Perlis]
 ____
-Syntactic sugar causes semicolon cancer.
+Lo zucchero sintattico provoca il cancro al punto e virgola.
 ____
 
-Don't use commas between the elements of sequential collection literals.
+Non utilizzare le virgole tra gli elementi dei valori letterali di raccolta sequenziali.
 
 [source,clojure]
 ----
-;; good
+;; bene
 [1 2 3]
 (1 2 3)
 
-;; bad
+;; male
 [1, 2, 3]
 (1, 2, 3)
 ----
 
-=== Optional Commas in Map Literals [[opt-commas-in-map-literals]]
+=== Virgole opzionali nei letterali di mappe [[opt-commas-in-map-literals]]
 
-Consider enhancing the readability of map literals via judicious use
-of commas and line breaks.
+Prendi in considerazione il miglioramento della leggibilità dei valori letterali della mappa tramite un uso giudizioso
+di virgole e interruzioni di riga.
 
 [source,clojure]
 ----
-;; good
+;; bene
 {:name "Bruce Wayne" :alter-ego "Batman"}
 
-;; good and arguably a bit more readable
+;; buono e probabilmente un po 'più leggibile
 {:name "Bruce Wayne"
  :alter-ego "Batman"}
 
-;; good and arguably more compact
+;; buono e probabilmente un po 'più compatto
 {:name "Bruce Wayne", :alter-ego "Batman"}
 ----
 
-=== Gather Trailing Parentheses [[gather-trailing-parens]]
+=== Raccogli le parentesi finali [[gather-trailing-parens]]
 
-Place all trailing parentheses on a single line instead of distinct lines.
+Posiziona tutte le parentesi finali su un'unica riga anziché su righe distinte.
 
 [source,clojure]
 ----
-;; good; single line
+;; bene; linea singola
 (when something
   (something-else))
 
-;; bad; distinct lines
+;; male; linee separate
 (when something
   (something-else)
 )
 ----
 
-=== Empty Lines Between Top-Level Forms [[empty-lines-between-top-level-forms]]
+=== Righe vuote tra form del top-level[[empty-lines-between-top-level-forms]]
 
-Use a single empty line between top-level forms.
-
-[source,clojure]
-----
-;; good
-(def x ...)
-
-(defn foo ...)
-
-;; bad
-(def x ...)
-(defn foo ...)
-
-;; bad
-(def x ...)
-
-
-(defn foo ...)
-----
-
-An exception to the rule is the grouping of related ``def``s together.
+Inserisci una singola linea vuota in mezzo ai form del top-level.
 
 [source,clojure]
 ----
-;; good
+;; bene
+(def x ...)
+
+(defn foo ...)
+
+;; male
+(def x ...)
+(defn foo ...)
+
+;; male
+(def x ...)
+
+
+(defn foo ...)
+----
+Un eccezione alla regola è il raggruppamento di definizioni (``def``).
+
+[source,clojure]
+----
+;; bene
 (def min-rows 10)
 (def max-rows 20)
 (def min-cols 15)
 (def max-cols 30)
 ----
 
-=== No Blank Lines Within Definition Forms [[no-blank-lines-within-def-forms]]
+=== Evita linee vuote all'interno dei form di definizione [[no-blank-lines-within-def-forms]]
 
-Do not place blank lines in the middle of a function or
-macro definition.  An exception can be made to indicate grouping of
-pairwise constructs as found in e.g. `let` and `cond`, in case those don't
-fit on the same line.
+Non inserire righe vuote nel mezzo di una funzione o
+macro. È possibile fare un'eccezione per indicare il raggruppamento di
+costrutti a coppie come si trovano ad es. `let` e `cond`, nel caso non ci stiano sulla stessa linea.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defn fibo-iter
   ([n] (fibo-iter 0 1 n))
   ([curr nxt n]
@@ -558,7 +532,7 @@ fit on the same line.
      (zero? n) curr
      :else (recur nxt (+' curr nxt) (dec n)))))
 
-;; okay - the line break delimits a cond pair
+;; accettabile - la linea vuota delimita la coppia del costrutto cond
 (defn fibo-iter
   ([n] (fibo-iter 0 1 n))
   ([curr nxt n]
@@ -569,7 +543,7 @@ fit on the same line.
      :else
      (recur nxt (+' curr nxt) (dec n)))))
 
-;; bad
+;; male
 (defn fibo-iter
   ([n] (fibo-iter 0 1 n))
 
@@ -579,35 +553,34 @@ fit on the same line.
 
      :else (recur nxt (+' curr nxt) (dec n)))))
 ----
+Occasionalmente, potrebbe sembrare una buona idea aggiungere una riga vuota
+qua e là in una definizione di funzione più lunga, ma se arrivi a questo
+punto dovresti anche considerare se questa lunga funzione non stia facendo
+troppo e potrebbe potenzialmente essere suddivisa in più funzioni.
 
-Occasionally, it might seem like a good idea to add a blank line
-here and there in a longer function definition, but if you get to this
-point you should also consider whether this long function isn't doing
-too much and could potentially be broken down.
+=== Niente spazi a fine linea [[no-trailing-whitespace]]
 
-=== No Trailing Whitespace [[no-trailing-whitespace]]
+Evita di lasciare spazi a fine  linea.
 
-Avoid trailing whitespace.
+=== Un File per Namespace [[one-file-per-namespace]]
 
-=== One File per Namespace [[one-file-per-namespace]]
-
-Use one file per namespace and one namespace per file.
+Usa un file per namespace e un namespace per file.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (ns foo.bar)
 
-;; bad
+;; male
 (ns foo.bar)
 (ns baz.qux)
 
-;; bad
+;; male
 (in-ns quux.quuz)
 (in-ns quuz.corge)
 
-;; bad
-(ns foo.bar) or (in-ns foo.bar) in multiple files
+;; male
+(ns foo.bar) o (in-ns foo.bar) in più file
 ----
 
 == Namespace Declaration
