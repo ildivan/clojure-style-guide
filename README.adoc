@@ -131,10 +131,10 @@ Alcuni altri buoni motivi per ignorare una particolare linea guida:
 
 Sono disponibili traduzioni della guida originale nelle seguenti lingue:
 
-* https://github.com/bbatsov/clojure-style-guide/master/README.adoc[Inglese (Originale)]
 * https://github.com/geekerzp/clojure-style-guide/blob/master/README-zhCN.md[Cinese]
-* https://github.com/totakke/clojure-style-guide/blob/ja/README.adoc[Giapponese]
 * https://github.com/kwakbab/clojure-style-guide/blob/master/README-koKO.md[Coreano]
+* https://github.com/totakke/clojure-style-guide/blob/ja/README.adoc[Giapponese]
+* https://github.com/bbatsov/clojure-style-guide/master/README.adoc[Inglese (Originale)]
 * https://github.com/theSkilled/clojure-style-guide/blob/pt-BR/README.md[Portoghese] (Lavori in corso)
 * https://github.com/Nondv/clojure-style-guide/blob/master/ru/README.md[Russo]
 * https://github.com/jeko2000/clojure-style-guide/blob/master/README.md[Spagnolo]
@@ -583,46 +583,46 @@ Usa un file per namespace e un namespace per file.
 (ns foo.bar) o (in-ns foo.bar) in più file
 ----
 
-== Namespace Declaration
+== Dichiarazione dei namespace
 
-=== No Single Segment Namespaces [[no-single-segment-namespaces]]
+=== No ai namespace con un solo segmento [[no-single-segment-namespaces]]
 
-Avoid single-segment namespaces.
+Evita i namespace con un singolo segmento.
 
 [source,clojure]
 ----
-;; good
-(ns example.ns)
+;; bene
+(ns esempio.ns)
 
-;; bad
-(ns example)
+;; male
+(ns esempio)
 ----
 
-Namespaces exist to disambiguate names. Using a single segment
-namespace puts you in direct conflict with everyone else using single
-segment namespaces, thus making it more likely you will conflict with
-another code base.
+Gli spazi dei nomi esistono per eliminare ambiguità tra i nomi. 
+Utilizzare uno spazio dei nomi formato da un singolo segmento ti mette in conflitto 
+diretto con tutti gli altri che usano spazi dei nomi con un singolo segmento,
+rendendo così più probabile il conflitto con un'altra base di codice.
 
-In practice this means that libraries should never use single-segment
-namespace to avoid namespace conflicts with other libraries.
-Within your own private app of course, you can do whatever you like.
+In pratica ciò significa che le biblioteche non dovrebbero mai utilizzare spazi dei nomi a segmento singolo
+per evitare conflitti di namespace con altre librerie.
+All'interno della tua app privata, ovviamente, puoi fare quello che vuoi.
 
-TIP: It's common practice to use the convention `domain.library-name`
-or `library-name.core` for libraries with a single namespace in them.
-Read on for more coverage of the namespace naming topic.
+TIP: è prassi comune utilizzare la convenzione `dominio.nome-libreria`
+o `nome-libreria.core` per le librerie con un singolo spazio dei nomi al loro interno.
+Continua a leggere per una maggiore copertura dell'argomento della denominazione dello spazio dei nomi.
 
-There are https://github.com/bbatsov/clojure-style-guide/pull/100[other reasons]
-why might want to avoid single-segment namespaces, so you should
-think long and hard before making any use of them.
+Ci sono https://github.com/bbatsov/clojure-style-guide/pull/100[altre ragioni]
+per le quali potresti voler evitare spazi dei nomi a segmento singolo, quindi dovresti pensarci
+bene prima di usarli nel tuo codice.
 
-=== Namespace Segments Limit [[namespace-segments-limit]]
+=== Limite dei segmenti nei namespace [[namespace-segments-limit]]
 
-Avoid the use of overly long namespaces (i.e., more than 5 segments).
+Evita di usare spazi dei nomi esageratamente lunghi (per esempio, più di 5 segmenti).
 
-=== Comprehensive `ns` Form [[comprehensive-ns-declaration]]
+=== Form `ns` comprensibile [[comprehensive-ns-declaration]]
 
-Start every namespace with a comprehensive `ns` form, comprised of
-``refer``s, ``require``s, and ``import``s, conventionally in that order.
+Inizia ogni spazio dei nomi con un form `ns` completo, composto da
+``refer``, ``require`` e ``import``, convenzionalmente in questo ordine.
 
 [source,clojure]
 ----
@@ -632,14 +632,14 @@ Start every namespace with a comprehensive `ns` form, comprised of
   (:import java.util.Date))
 ----
 
-=== Line Breaks in `ns` [[line-break-ns-declaration]]
+=== Interruzioni di riga in `ns` [[line-break-ns-declaration]]
 
-When there are multiple dependencies, you may want give each one its own line.
-This facilitates sorting, readability, and cleaner diffs for dependency changes.
+Quando ci sono più dipendenze, potresti voler assegnare a ciascuna la propria riga.
+Ciò facilita l'ordinamento, la leggibilità e differenze più pulite per le modifiche alle dipendenze.
 
 [source,clojure]
 ----
-;; better
+;; meglio
 (ns examples.ns
   (:require
    [clojure.string :as s :refer [blank?]]
@@ -651,7 +651,7 @@ This facilitates sorting, readability, and cleaner diffs for dependency changes.
    [java.util.concurrent Executors
                          LinkedBlockingQueue]))
 
-;; good
+;; bene
 (ns examples.ns
   (:require [clojure.string :as s :refer [blank?]]
             [clojure.set :as set]
@@ -661,44 +661,44 @@ This facilitates sorting, readability, and cleaner diffs for dependency changes.
            [java.util.concurrent Executors
                                  LinkedBlockingQueue]))
 
-;; bad
+;; male
 (ns examples.ns
   (:require [clojure.string :as s :refer [blank?]] [clojure.set :as set] [clojure.java.shell :as sh])
   (:import java.util.Date java.text.SimpleDateFormat [java.util.concurrent Executors LinkedBlockingQueue]))
 ----
 
-=== Prefer `:require` Over `:use` [[prefer-require-over-use]]
+=== Preferisci `:require` rispetto a `:use` [[prefer-require-over-use]]
 
-In the `ns` form prefer `:require :as` over `:require :refer` over `:require
-:refer :all`.  Prefer `:require` over `:use`; the latter form should be
-considered deprecated for new code.
+In `ns` preferisci `:require :as` piuttosto che  `:require :refer` e piuttosto che `:require
+:refer :all`.  Preferisci `:require` piuttosto `:use`; l'ultima forma dovrebbe essere considerata
+deprecata per codice nuovo.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (ns examples.ns
   (:require [clojure.zip :as zip]))
 
-;; good
+;; bene
 (ns examples.ns
   (:require [clojure.zip :refer [lefts rights]]))
 
-;; acceptable as warranted
+;; accettabile
 (ns examples.ns
   (:require [clojure.zip :refer :all]))
 
-;; bad
+;; male
 (ns examples.ns
   (:use clojure.zip))
 ----
 
-=== Sort Requirements and Imports [[sort-requirements-and-imports]]
+=== Ordina requisiti e importazioni [[sort-requirements-and-imports]]
 
-In the `ns` form, sort your requirements and imports. This facilitates readability and avoids duplication, especially when the list of required / imported namespaces is very long.
+In  `ns` , ordina i requisiti e le importazioni. Questo facilità la leggibilità e evita la duplicazione, specialmente quando la lista degli spazi dei nomi richiesti / importati è molto lunga.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (ns examples.ns
   (:require
    [baz.core :as baz]
@@ -707,7 +707,7 @@ In the `ns` form, sort your requirements and imports. This facilitates readabili
    [clojure.string :as s :refer [blank?]]
    [foo.bar :as foo]))
 
-;; bad
+;; male
 (ns examples.ns
   (:require
    [clojure.string :as s :refer [blank?]]
@@ -717,11 +717,11 @@ In the `ns` form, sort your requirements and imports. This facilitates readabili
    [clojure.java.shell :as sh]))
 ----
 
-=== Use Idiomatic Namespace Aliases
+=== Usa degli alias idiomatici per i namespace
 
-Many core Clojure namespaces have idiomatic aliases that you're
-encouraged to use within your projects - e.g. the most common way to
-require `clojure.string` is: `[clojure.string :as str]`.
+Molti spazi dei nomi di Clojure hanno alias idiomatici che sei
+incoraggiato a utilizzare all'interno dei tuoi progetti - ad es. il modo più comune per
+rechiedere `clojure.string` è: `[clojure.string :as str]`.
 
 NOTE: This may appear to mask
 `clojure.core.str`, but it doesn't. It's expected that
