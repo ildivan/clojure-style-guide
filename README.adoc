@@ -723,33 +723,31 @@ Molti spazi dei nomi di Clojure hanno alias idiomatici che sei
 incoraggiato a utilizzare all'interno dei tuoi progetti - ad es. il modo più comune per
 rechiedere `clojure.string` è: `[clojure.string :as str]`.
 
-NOTE: This may appear to mask
-`clojure.core.str`, but it doesn't. It's expected that
-`clojure.core/str` and `clojure.string/*` to be used in a namespace as
-`str` and `str/whatever` without conflict.
+NOTE: Potrebbe dare l'impressione di mascherare
+`clojure.core.str`, ma non lo fa. Ci si aspetta che 
+`clojure.core/str` e `clojure.string/*` vengano usati in un namespace come `str` e `str/qualcosa` senza conflitti.
 
 [source,clojure]
 ----
-;; good
-(ns ... (:require [clojure.string :as str] ...)
+;; bene
+(ns ... (:require [clojure.string :as str] ...))
 
 (str/join ...)
 
-;; not as good - just be idiomatic and use as `str/`
-(ns ... (:require [clojure.string :as string] ...)
+;; meno bene - sii idiomatico e usa `str/`
+(ns ... (:require [clojure.string :as string] ...))
 
 (string/join ...)
 ----
 
-As noted in the next section, it's generally considered idiomatic to use
-an alias that is the last segment of the namespace, if that makes it unique,
-or else the two segments, typically dropping redundant parts like `clj` or `core`.
+Come notato nella sezione successiva, è generalmente considerato idiomatico usare
+un alias che è l'ultimo segmento dello spazio dei nomi, se questo lo rende unico,
+oppure i due segmenti, in genere eliminando parti ridondanti come "clj" o "core".
 
-Amongst Clojure's core and Contrib namespaces, the following namespaces have
-idiomatic aliases following that pattern:
+Tra gli spazi dei nomi core e Contrib di Clojure, i seguenti spazi dei nomi hanno alias idiomatici che seguono questo schema:
 
 |===
-| Namespace | Idiomatic Alias
+| Namespace | Alias idiomatico
 | clojure.datafy
 | datafy
 | clojure.edn
@@ -774,10 +772,10 @@ idiomatic aliases following that pattern:
 | cli
 |===
 
-Then there are some core and Contrib namespaces that have shorter idiomatic aliases:
+Poi ci sono alcuni spazi dei nomi core e Contrib che hanno alias idiomatici più brevi:
 
 |===
-| Namespace | Idiomatic Alias
+| Namespace | Alias idiomatico
 | clojure.java.shell
 | sh
 | clojure.pprint
@@ -796,11 +794,10 @@ Then there are some core and Contrib namespaces that have shorter idiomatic alia
 | r
 |===
 
-And amongst commonly used community libraries, there are also many that have
-widely-used, idiomatic aliases for several namespaces:
+E tra le librerie della community comunemente usate, ce ne sono anche molte che hanno alias idiomatici ampiamente utilizzati per diversi spazi dei nomi:
 
 |===
-| Namespace | Idiomatic Alias
+| Namespace | Alias idiomatico
 | cheshire.core
 | json
 | clj-yaml.core
@@ -815,23 +812,22 @@ widely-used, idiomatic aliases for several namespaces:
 | jdbc
 |===
 
-=== A Recipe for Good Namespace Aliases
+=== Una ricetta per dei buoni alias dei namespace
 
-Above we covered a handful of popular namespaces and their idiomatic aliases.
-You might have noticed that those are a bit inconsistent:
+Sopra abbiamo coperto una manciata di spazi dei nomi popolari e i loro alias idiomatici.
+Potresti aver notato che questi sono un po' incoerenti:
 
-* `clojure.string` becomes `str`
-* `clojure.pprint` becomes `pp`
-* `clojure.walk` becomes `walk`
-* `clojure.spec.alpha` becomes `s`
+* `clojure.string` diventa `str`
+* `clojure.pprint` diventa `pp`
+* `clojure.walk` diventa `walk`
+* `clojure.spec.alpha` diventa `s`
 
-It's clear that the one thing they have in common is that they aim to be concise, but still carry some meaning (aliasing `clojure.walk` to `w` would
-be concise, but won't carry much meaning).
+È chiaro che l'unica cosa che hanno in comune è che mirano a essere concisi, ma hanno comunque un significato (dare `w` come alias a `clojure.walk` sarebbe stato conciso, ma non avrebbe molto significato).
 
-But what to do about all the other namespaces out there that don't have idiomatic aliases? Well, you better be consistent in your approach to deriving aliases for them,
-otherwise the people working on a shared Clojure codebase are going to experience a great deal of confusion. Here are a few rules that you should follow.footnote:[These guidelines are based on a https://stuartsierra.com/2015/05/10/clojure-namespace-aliases[blog post] by Stuart Sierra.]
+Ma cosa fare con tutti gli altri spazi dei nomi là fuori che non hanno alias idiomatici? Beh, faresti meglio a essere coerente nel tuo approccio alla derivazione degli alias per loro,
+altrimenti le persone che lavorano su una base di codice Clojure condivisa sperimenteranno molta confusione. Ecco alcune regole che dovresti seguire.footnote:[Queste linee guide sono basate su un  https://stuartsierra.com/2015/05/10/clojure-namespace-aliases[blog post] di Stuart Sierra.]
 
-1. Make the alias the same as the namespace name with the leading parts removed.
+1) Rendi l'alias uguale al nome dello spazio dei nomi con le parti iniziali rimosse.
 
 [source,clojure]
 ----
@@ -841,7 +837,7 @@ otherwise the people working on a shared Clojure codebase are going to experienc
    [clojure.reflect :as reflect]))
 ----
 
-2. Keep enough trailing parts to make each alias unique.
+2) Mantieni un numero sufficiente di parti finali per rendere unico ogni alias.
 
 [source,clojure]
 ----
@@ -849,9 +845,9 @@ otherwise the people working on a shared Clojure codebase are going to experienc
 [clojure.xml :as xml]
 ----
 
-TIP: Yes, namespace aliases can have dots in them. Make good use of them.
+TIP: Sì, gli alias dello spazio dei nomi possono contenere dei punti. Fatene buon uso.
 
-3. Eliminate redundant words such as "core" and "clj" in aliases.
+3) Elimina parole ridondanti come "core" e "clj" negli alias.
 
 [source,clojure]
 ----
@@ -859,146 +855,142 @@ TIP: Yes, namespace aliases can have dots in them. Make good use of them.
 [clj-time.format :as time.format]
 ----
 
-=== Use Consistent Namespace Aliases
+=== Usa alias degli spazi dei nomi coerenti
 
-Across a project, it's good to be consistent with namespace aliases; e.g., don't require `clojure.string` as `str` in one namespace but `string` in another.
-If you follow the previous two guidelines you're basically covered, but if you opt for custom namespace aliasing scheme it's still important to apply it
-consistently within your projects.
+In un progetto, è bene essere coerenti con gli alias dello spazio dei nomi; ad esempio, non richiedere `clojure.string` come `str` in uno spazio dei nomi ma `string` in un altro.
+Se segui le due linee guida precedenti sei sostanzialmente coperto, ma se opti per lo schema di aliasing dello spazio dei nomi personalizzato è comunque importante applicarlo
+coerentemente all'interno dei vostri progetti.
 
-== Naming
+== Nomenclatura
 
 [quote, Phil Karlton]
 ____
-The only real difficulties in programming are cache invalidation and
-naming things.
+Le uniche vere difficoltà nella programmazione sono l'invalidazione della cache e dare nomi alle cose.
 ____
 
-=== Namespace Naming Schemas [[naming-ns-naming-schemas]]
+=== Schema per la nomenclatura degli spazi dei nomi [[naming-ns-naming-schemas]]
 
-When naming namespaces favor the following two schemas:
+Quando stai dando un nome ad un namespace preferisci i seguenti due schemi:
 
 * `project.module`
 * `organization.project.module`
 
-When you're following the `project.module` naming scheme and your project
-has a single (implementation) namespace it's common to name it `project.core`.
-Avoid the `project.core` name in all other cases, as more informative names
-are always a better idea.
+Quando segui lo schema di denominazione `project.module` e il tuo progetto
+ha un singolo spazio dei nomi (di implementazione) è comune chiamarlo `project.core`.
+Evita il nome `project.core` in tutti gli altri casi, come nomi più informativi
+sono sempre un'idea migliore.
 
-=== Composite Word Namespace Segments [[naming-namespace-composite-segments]]
+=== Segmenti dello spazio dei nomi di parole composte[[naming-namespace-composite-segments]]
 
-Use `lisp-case` in composite namespace segments (e.g. `bruce.project-euler`).
+Usa `lisp-case` nei segmenti di namespace compositi (ad esempio `bruce.project-euler`).
 
-NOTE: Many non-Lisp programming communities refer to `lisp-case` as
-`kebab-case`, but we all know that Lisp existed way before kebab
-was invented.
+NOTE: Molte comunità di programmatori non Lisp si riferiscono a `lisp-case` come
+`kebab-case`, ma sappiamo tutti che Lisp esisteva molto prima del kebab.
 
-=== Functions and Variables [[naming-functions-and-variables]]
+=== Funzioni e variabili [[naming-functions-and-variables]]
 
-Use `lisp-case` for function and variable names.
+Usa `lisp-case` per i nomi delle funzioni e variabili.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (def some-var ...)
 (defn some-fun ...)
 
-;; bad
+;; male
 (def someVar ...)
 (defn somefun ...)
 (def some_fun ...)
 ----
 
-=== Protocols, Records, Structs and Types [[naming-protocols-records-structs-and-types]]
+=== Protocolli, Records, Structs e Tipi [[naming-protocols-records-structs-and-types]]
 
-Use `CapitalCase` for protocols, records, structs, and types. (Keep
-acronyms like HTTP, RFC, XML uppercase.)
+Usa `CapitalCase` per i protocolli, records, structs, e i tipi. (mantieni acronimi come  HTTP, RFC, XML maiuscoli.)
 
-NOTE: `CapitalCase` is also known as `UpperCamelCase, `CapitalWords`
-and `PascalCase`.
+NOTE: `CapitalCase` è anche conosciuto come `UpperCamelCase, `CapitalWords` e  `PascalCase`.
 
-=== Predicate Methods [[naming-predicates]]
+=== Metodi Predicati [[naming-predicates]]
 
-The names of predicate methods (methods that return a boolean value)
-should end in a question mark
-(e.g., `even?`).
+I nomi dei metodi predicati (metodi che restituiscono un valore booleano)
+dovrebbe terminare con un punto interrogativo
+(ad esempio, "pari?").
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defn palindrome? ...)
 
-;; bad
-(defn palindrome-p ...) ; Common Lisp style
-(defn is-palindrome ...) ; Java style
+;; male
+(defn palindrome-p ...) ; in stile Common Lisp
+(defn is-palindrome ...) ; in stile Java
 ----
 
-=== Unsafe Functions [[naming-unsafe-functions]]
+=== Funzioni non sicure [[naming-unsafe-functions]]
 
-The names of functions/macros that are not safe in STM transactions
-should end with an exclamation mark (e.g. `reset!`).
+I nomi delle funzioni/macro che non sono sicure nelle transazioni STM
+dovrebbero terminare con un punto esclamativo (ad es. `reset!`).
 
-=== Conversion Functions [[naming-conversion-functions]]
+=== Funzioni di conversione [[naming-conversion-functions]]
 
-Use `+->+` instead of `to` in the names of conversion functions.
+Usa "+->+" invece di "to" nei nomi delle funzioni di conversione.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defn f->c ...)
 
-;; not so good
+;; non così bene
 (defn f-to-c ...)
 ----
 
-=== Dynamic Vars [[naming-dynamic-vars]]
+=== Variabili dinamiche [[naming-dynamic-vars]]
 
-Use `*earmuffs*` for things intended for rebinding (ie. are dynamic).
+Usa `*earmuffs*` per cose destinate a essere riassociate (ad es. sono dinamiche).
 
 [source,clojure]
 ----
-;; good
+;; bene
 (def ^:dynamic *a* 10)
 
-;; bad
+;; male
 (def ^:dynamic a 10)
 ----
 
-=== Constants [[naming-constants]]
+=== Costanti [[naming-constants]]
 
-Don't use a special notation for constants; everything is assumed a constant
-unless specified otherwise.
+Non usare una notazione speciale per le costanti; tutto è presunto una costante
+se non diversamente specificato.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (def max-size 10)
 
-;; bad
-(def MAX-SIZE 10) ; Java style
-(def +max-size+ 10) ; Common Lisp style, global constant
-(def *max-size* 10) ; Common Lisp style, global variable
+;; male
+(def MAX-SIZE 10) ; in stile Java
+(def +max-size+ 10) ; in stile Common Lisp , costante globale
+(def *max-size* 10) ; in stile Common Lisp , variabile globale
 ----
 
-NOTE: Famously `\*clojure-version*` defies this convention, but you should
-treat this naming choice as a historical oddity and not as an example to
-follow.
+NOTE: Notoriamente `\*clojure-version*` sfida questa convenzione, ma dovresti
+trattare questa scelta di denominazione come una stranezza storica e non come un esempio da
+seguire.
 
-=== Unused Bindings [[naming-unused-bindings]]
+=== Associazioni  [[naming-unused-bindings]]
 
-Use `+_+` for destructuring targets and formal argument names whose
-value will be ignored by the code at hand.
+Usa `+_+` per destrutturare obiettivi e nomi di argomenti formali di cui
+il valore verrà ignorato dal codice a portata di mano.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (let [[a b _ c] [1 2 3 4]]
   (println a b c))
 
 (dotimes [_ 3]
   (println "Hello!"))
 
-;; bad
+;; male
 (let [[a b c d] [1 2 3 4]]
   (println a b d))
 
@@ -1006,18 +998,18 @@ value will be ignored by the code at hand.
   (println "Hello!"))
 ----
 
-However, when it can help the understanding of your code, it can be useful to explicitly name unused arguments or maps you're destructuring from. In this case, prepend the name with an underscore to explicitly signal that the variable is supposed to be unused.
+Tuttavia, quando può aiutare la comprensione del tuo codice, può essere utile nominare esplicitamente argomenti o mappe inutilizzati da cui stai destrutturando. In questo caso, anteponi al nome un carattere di sottolineatura per segnalare esplicitamente che la variabile dovrebbe essere inutilizzata.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defn myfun1 [context _]
  (assoc context :foo "bar"))
 
 (defn myfun2 [context {:keys [id]}]
  (assoc context :user-id id))
 
-;; better
+;; meglio ancora
 (defn myfun1 [context _user]
  (assoc context :foo "bar"))
 
