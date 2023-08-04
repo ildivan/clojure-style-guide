@@ -1017,72 +1017,70 @@ Tuttavia, quando può aiutare la comprensione del tuo codice, può essere utile 
  (assoc context :user-id id))
 ----
 
-=== Idiomatic Names [[idiomatic-names]]
+=== Nomi idiomatici [[idiomatic-names]]
 
-Follow ``clojure.core``'s example for idiomatic names like `pred` and `coll`.
+Segui l'esempio di ``clojure.core`` per nomi idiomatici come `pred` e `coll`.
 
-* in functions:
- ** `f`, `g`, `h` - function input
- ** `n` - integer input usually a size
- ** `index`, `i` - integer index
- ** `x`, `y` - numbers
- ** `xs` - sequence
- ** `m` - map
- ** `k`, `ks` - key, keys
- ** `v`, `vs` - value, values (as in a key/value pair)
- ** `s` - string input
+* nelle funzioni:
+ ** `f`, `g`, `h` - input delle funzioni
+ ** `n` - input intero, di solito indica grandezza
+ ** `index`, `i` - intero usato per indici
+ ** `x`, `y` - numeri
+ ** `xs` - sequenza
+ ** `m` - mappa
+ ** `k`, `ks` - chiave, chiavi
+ ** `v`, `vs` - valore, valori (come in una coppia chiave/valore)
+ ** `s` - input stringa
  ** `re` - regular expression
- ** `sym` - symbol
- ** `coll` - a collection
- ** `pred` - a predicate closure
- ** `& more` - variadic input
- ** `xf` - xform, a transducer
- ** `ns` - namespacefootnote:[Technically this will shadow the `ns` macro, but it's extremely unlikely you'll ever need it in the body of a function.]
-* in macros:
- ** `expr` - an expression
- ** `body` - a macro body
- ** `binding` - a macro binding vector
-* in methods (when specified in `defprotocol`, `deftype`, `defrecord`, `reify`, etc):
- ** `this` - for the first argument, indicating a reference to the object - or alternatively, a consistent name which describes the object
+ ** `sym` - simbolo
+ ** `coll` - una collezione
+ ** `pred` - una closure predicativa
+ ** `& more` - input variadico
+ ** `xf` - xform, un trasduttore
+ ** `ns` - namespacefootnote:[Tecnicamente questo oscurerà la macro `ns`, ma è estremamente improbabile che tu ne abbia mai bisogno nel corpo di una funzione.]
+* nelle macro:
+ ** `expr` - un espressione
+ ** `body` - il corpo di una macro
+ ** `binding` - un vettore di legame macro
+* nei metodi (quando specificato in `defprotocol`, `deftype`, `defrecord`, `reify`, etc):
+ ** `this` - per il primo argomento, indicando un riferimento all'oggetto - o in alternativa, un nome coerente che descrive l'oggetto
 
-== Functions
+== Funzioni
 
-=== Optional New Line After Function Name [[optional-new-line-after-fn-name]]
+=== Nuova riga facoltativa dopo il nome della funzione[[optional-new-line-after-fn-name]]
 
-Optionally omit the new line between the function name and argument
-vector for `defn` when there is no docstring.
+Facoltativamente omettere la nuova riga tra il nome della funzione e l'argomento vettore per `defn` quando non c'è docstring.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defn foo
   [x]
   (bar x))
 
-;; good
+;; bene
 (defn foo [x]
   (bar x))
 
-;; bad
+;; male
 (defn foo
   [x] (bar x))
 ----
 
 === Multimethod Dispatch Val Placement [[multimethod-dispatch-val-placement]]
 
-Place the `dispatch-val` of a multimethod on the same line as the
-function name.
+Posiziona il `dispatch-val` di un multimetodo sulla stessa riga del nome della funzione.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defmethod foo :bar [x] (baz x))
 
 (defmethod foo :bar
   [x]
   (baz x))
 
-;; bad
+;; male
 (defmethod foo
   :bar
   [x]
@@ -1093,21 +1091,20 @@ function name.
   (baz x))
 ----
 
-=== One-line Functions
+=== Funzioni a singola linea
 
-Optionally omit the new line between the argument vector and a short
-function body.
+Facoltativamente, ometti la nuova riga tra il vettore degli argomenti e un corpo della funzione molto corto.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defn foo [x]
   (bar x))
 
-;; good for a small function body
+;; bene per un corpo funzione corto
 (defn foo [x] (bar x))
 
-;; good for multi-arity functions
+;; bene per funzioni con multi-arità
 (defn foo
   ([x] (bar x))
   ([x y]
@@ -1115,21 +1112,20 @@ function body.
      (bar x)
      (baz x))))
 
-;; bad
+;; male
 (defn foo
   [x] (if (predicate? x)
         (bar x)
         (baz x)))
 ----
 
-=== Multiple Arity Indentation [[multiple-arity-indentation]]
+=== Indentazione con arità multipla [[multiple-arity-indentation]]
 
-Indent each arity form of a function definition vertically aligned with its
-parameters.
+Indenta ogni form di arità di una definizione di funzione allineata verticalmente con i suoi parametri.
 
 [source,clojure]
 ----
-;; good
+;; bene
 (defn foo
   "I have two arities."
   ([x]
@@ -1137,7 +1133,7 @@ parameters.
   ([x y]
    (+ x y)))
 
-;; bad - extra indentation
+;; male - indentazione extra
 (defn foo
   "I have two arities."
   ([x]
@@ -1146,17 +1142,14 @@ parameters.
     (+ x y)))
 ----
 
-=== Multiple Arity Order [[multiple-arity-order]]
+=== Ordine delle arità multiple [[multiple-arity-order]]
 
-Sort the arities of a function
-from fewest to most arguments. The common case of multi-arity
-functions is that some K arguments fully specifies the function's
-behavior, and that arities N < K partially apply the K arity, and
-arities N > K provide a fold of the K arity over varargs.
+Ordina le arità di una funzione dal minor numero al maggior numero di argomenti. Il caso comune di funzioni con arità multipla è che alcuni argomenti K specificano completamente il comportamento della funzione, e che le arità N < K applicano parzialmente l'arità K, e
+le aritò N > K forniscono una piegatura dell'arità K su varargs.
 
 [source,clojure]
 ----
-;; good - it's easy to scan for the nth arity
+;; bene - è facile cercare l'n-esima arità
 (defn foo
   "I have two arities."
   ([x]
@@ -1164,7 +1157,7 @@ arities N > K provide a fold of the K arity over varargs.
   ([x y]
    (+ x y)))
 
-;; okay - the other arities are applications of the two-arity
+;; okay - le altre arità sono applicazioni della prima arità
 (defn foo
   "I have two arities."
   ([x y]
@@ -1174,7 +1167,7 @@ arities N > K provide a fold of the K arity over varargs.
   ([x y z & more]
    (reduce foo (foo x (foo y z)) more)))
 
-;; bad - unordered for no apparent reason
+;; male - disordinata senza motivo
 (defn foo
   ([x] 1)
   ([x y z] (foo x (foo y z)))
@@ -1182,10 +1175,9 @@ arities N > K provide a fold of the K arity over varargs.
   ([w x y z & more] (reduce foo (foo w (foo x (foo y z))) more)))
 ----
 
-=== Function Length [[function-length]]
+=== Lunghezza delle funzioni [[function-length]]
 
-Avoid functions longer than 10 LOC (lines of code). Ideally, most
-functions will be shorter than 5 LOC.
+Evita funzioni più lunghe di 10 LOC (righe di codice). Idealmente, la maggior parte delle funzioni saranno più brevi di 5 LOC.
 
 === Function Positional Parameters Limit [[function-positional-parameter-limit]]
 
